@@ -1,0 +1,51 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <h1>Payment Records</h1>
+    <form method="post" action="/instance/static">
+        Company: <input type="text" name="company" required><br>
+        Amount: <input type="number" name="amount" required><br>
+        Payment Date: <input type="date" name="payment_date" required><br>
+        Status: <select name="status">
+            <option value="paid">Paid</option>
+            <option value="unpaid">Unpaid</option>
+        </select><br>
+        Due Date: <select name="due_date" required></select><br>
+        <button type="submit">Add Record</button>
+    </form>
+    <hr>
+    <table>
+        <tr>
+            <th>Company</th>
+            <th>Amount</th>
+            <th>Payment Date</th>
+            <th>Status</th>
+            <th>Due Date</th>
+            <th>Delete</th>
+        </tr>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.company }}</td>
+            <td>{{ record.amount }}</td>
+            <td>{{ record.payment_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ record.status }}</td>
+            <td>{{ record.due_date.strftime('%Y-%m-%d') }}</td>
+            <td>
+                <form method="post" action="{{ url_for('delete', id=record.id) }}">
+                    <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
